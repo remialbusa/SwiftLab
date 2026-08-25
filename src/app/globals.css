@@ -1,26 +1,176 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5faf9;
+  --foreground: #182430;
+
+  /* SwiftLab brand palette */
+  --navy-deep: #122f4e;
+  --navy-mid: #1e5182;
+  --teal-bg: #eaf6f5;
+  --teal-border: #bfe3e0;
+  --green: #2e9e5b;
+  --green-dark: #217a45;
+  --amber: #efa23d;
+  --red: #e15252;
+  --ink: #182430;
+  --muted: #647686;
+  --surface: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-mid: var(--navy-mid);
+  --color-teal-bg: var(--teal-bg);
+  --color-teal-border: var(--teal-border);
+  --color-green: var(--green);
+  --color-green-dark: var(--green-dark);
+  --color-amber: var(--amber);
+  --color-red: var(--red);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-inter), var(--font-geist-sans), sans-serif;
+  --font-poppins: var(--font-poppins), sans-serif;
+  --font-mono: var(--font-plex-mono), var(--font-geist-mono), monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* ---- Shared brand components ---- */
+.brand-header {
+  background: linear-gradient(120deg, var(--navy-deep), var(--navy-mid));
+  padding: 28px 8vw;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--green-dark);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid #e4eef0;
+  box-shadow: 0 12px 32px rgba(18, 47, 78, 0.08);
+}
+
+.badge {
+  font-family: var(--font-poppins);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: fit-content;
+}
+
+.badge-done {
+  background: #e4f6ec;
+  color: var(--green-dark);
+}
+.badge-done::before {
+  content: "✓";
+  font-size: 11px;
+}
+
+.badge-progress {
+  background: #fdf0df;
+  color: var(--amber);
+}
+.badge-progress::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+
+.btn {
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 13px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: var(--green);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--green-dark);
+}
+.btn-secondary {
+  background: var(--teal-bg);
+  color: var(--navy-deep);
+  border: 1px solid var(--teal-border);
+}
+
+.field-label {
+  display: block;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #eef3f3;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: white;
+}
+.field-input:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+.notice {
+  margin-top: 20px;
+  background: #fdf7ec;
+  border: 1px solid #f3e3c4;
+  border-radius: 10px;
+  padding: 16px;
+  font-size: 13px;
+  color: #7a5a20;
 }
