@@ -12,8 +12,10 @@ const serverEnvSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   RESEND_API_KEY: z.string().min(1),
   EMAIL_FROM: z.string().min(1).default('SwiftLab <onboarding@resend.dev>'),
-  // Optional: when set, ALL emails are sent to this address instead of the
-  // patient's — useful for dev/test when Resend only permits your own address.
+  // Optional dev helper: when set, emails that FAIL to deliver to the real
+  // recipient are retried to this address. This is useful while Resend's free
+  // tier only permits sending to your own verified address. Remove it (or
+  // leave unset) in production so patients always receive their mail.
   EMAIL_TEST_TO: z.string().email().optional(),
   APP_URL: z.string().url().default('http://localhost:3000'),
   QPDF_PATH: z.string().optional(),
