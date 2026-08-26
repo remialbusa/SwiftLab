@@ -17,6 +17,15 @@ const allowedDevOrigins = [
 
 const nextConfig: NextConfig = {
   allowedDevOrigins,
+  /*
+   * The qpdf binary is invoked by path (not imported), so Next.js's file
+   * tracing won't include it in serverless bundles by default. Force the
+   * bundled Linux qpdf + libs into every function so PDF encryption works
+   * on Vercel.
+   */
+  outputFileTracingIncludes: {
+    "/*": ["./bin/qpdf-linux/**"],
+  },
 };
 
 export default nextConfig;
