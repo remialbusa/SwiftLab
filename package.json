@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "seed:staff": "node --import tsx scripts/seed-staff.ts",
     "seed:demo": "node --import tsx scripts/create-order-demo.ts",
-    "bootstrap:db": "node --import tsx scripts/bootstrap-dev-db.ts"
+    "bootstrap:db": "node --import tsx scripts/bootstrap-dev-db.ts",
+    "test:smtp": "node --import tsx scripts/test-smtp-local.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",
@@ -19,6 +20,7 @@
     "@tanstack/react-query": "^5.102.3",
     "next": "16.3.3",
     "node-qpdf2": "^6.0.0",
+    "nodemailer": "^9.0.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "resend": "^6.22.1",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/ui": "^4.1.11",

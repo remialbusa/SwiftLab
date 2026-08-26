@@ -17,6 +17,22 @@ const serverEnvSchema = z.object({
   // tier only permits sending to your own verified address. Remove it (or
   // leave unset) in production so patients always receive their mail.
   EMAIL_TEST_TO: z.string().email().optional(),
+  // --- SMTP (optional) ---
+  // When SMTP_HOST is set, email goes out via SMTP instead of Resend. This
+  // supports free/no-domain providers like Gmail (SMTP_HOST=smtp.gmail.com,
+  // port 587, SMTP_USER=<your gmail>, SMTP_PASS=<app password>) or Brevo
+  // (smtp-relay.brevo.com, port 587, SMTP_USER=<login>, SMTP_PASS=<SMTP key>),
+  // both of which can deliver to ANY recipient without owning a domain.
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  // "true"/"false" string from env -> boolean; defaults to false (STARTTLS).
+  SMTP_SECURE: z
+    .enum(['true', 'false'])
+    .transform((v) => v === 'true')
+    .pipe(z.boolean())
+    .default(false),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
   APP_URL: z.string().url().default('http://localhost:3000'),
   QPDF_PATH: z.string().optional(),
 });
