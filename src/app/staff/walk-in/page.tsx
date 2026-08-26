@@ -121,7 +121,7 @@ export default function WalkInPage() {
               htmlFor={nameId}
               className="mb-1 block text-sm font-medium text-slate-700"
             >
-              Full name
+              First name
             </label>
             <input
               id={nameId}

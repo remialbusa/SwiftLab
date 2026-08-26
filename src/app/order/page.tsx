@@ -206,7 +206,7 @@ export default function OrderPage() {
           <div className="mt-2 grid gap-0 sm:grid-cols-2 sm:gap-x-4">
             <div>
               <label htmlFor={nameId} className="field-label">
-                Full name
+                First name
               </label>
               <input
                 id={nameId}
@@ -214,7 +214,7 @@ export default function OrderPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="field-input"
-                placeholder="Juan Dela Cruz"
+                placeholder="Juan"
               />
             </div>
             <div>
