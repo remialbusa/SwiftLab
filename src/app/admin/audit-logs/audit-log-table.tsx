@@ -49,18 +49,18 @@ export default function AdminAuditLogsClient({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-bold text-slate-900">Audit log</h1>
         <input
           value={actionFilter}
           onChange={(e) => applyFilter(e.target.value)}
           placeholder="Filter by action…"
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="w-full max-w-xs rounded-lg border border-slate-300 px-3 py-2 text-sm"
         />
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="w-full min-w-180 text-sm">
           <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
               <th className="px-4 py-3">Time</th>

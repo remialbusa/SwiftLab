@@ -14,12 +14,12 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
           <Link href="/admin" className="text-lg font-bold text-teal-700">
             SwiftLab <span className="text-slate-700">Admin</span>
           </Link>
-          <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
+          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-slate-600">
             <Link href="/admin/lab-tests" className="hover:text-teal-700">
               Lab tests
             </Link>
