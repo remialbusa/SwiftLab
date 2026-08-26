@@ -23,6 +23,8 @@ export interface CreateOrderInput {
   phone?: string;
   testIds: string[];
   privacyConsent: boolean;
+  /** Origin of the request (public URL the patient used). Used for email links. */
+  origin?: string;
 }
 
 export type CreateOrderResult =
@@ -109,7 +111,7 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     expires_at: expiresAt.toISOString(),
   });
 
-  const trackingUrl = absoluteUrl(`/track/${trackingToken}`);
+  const trackingUrl = absoluteUrl(`/track/${trackingToken}`, input.origin);
   // Email is best-effort: a delivery failure must not lose the order, which
   // is already persisted. Log it for follow-up instead of failing the request.
   try {
@@ -243,7 +245,12 @@ export interface OrderSummary {
 }
 
 /** Issue a results-scoped magic link for the download page. */
-export async function issueResultsLink(orderId: string, patientEmail: string, patientName: string): Promise<void> {
+export async function issueResultsLink(
+  orderId: string,
+  patientEmail: string,
+  patientName: string,
+  origin?: string,
+): Promise<void> {
   const client = getServiceClient();
   const token = generateToken();
   const settings = await getSettings();
@@ -262,7 +269,7 @@ export async function issueResultsLink(orderId: string, patientEmail: string, pa
     ? `last name + birth date (e.g. ${derivePdfPassword({ lastName: patient.last_name, birthDate: patient.dob })})`
     : 'your last name and birth date (MMDDYYYY)';
 
-  const resultsUrl = absoluteUrl(`/results/${token}`);
+  const resultsUrl = absoluteUrl(`/results/${token}`, origin);
   // Best-effort: a failed email must not roll back the results link, which
   // staff can re-send later.
   try {

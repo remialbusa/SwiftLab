@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createOrder } from '@/lib/orders';
+import { requestOrigin } from '@/lib/requestOrigin';
 
 const createOrderSchema = z.object({
   fullName: z.string().min(2).max(120),
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? 'Invalid input.' }, { status: 400 });
   }
 
-  const result = await createOrder(parsed.data);
+  const result = await createOrder({ ...parsed.data, origin: requestOrigin(request) });
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 422 });
   }

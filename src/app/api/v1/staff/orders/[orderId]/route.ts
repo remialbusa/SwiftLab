@@ -4,6 +4,7 @@ import { getStaffSession } from '@/lib/staffSession';
 import { getServiceClient } from '@/lib/supabase/server';
 import { writeAuditLog } from '@/lib/audit';
 import { issueResultsLink } from '@/lib/orders';
+import { requestOrigin } from '@/lib/requestOrigin';
 
 const paramsSchema = z.object({ orderId: z.string().uuid() });
 const bodySchema = z.object({
@@ -66,7 +67,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ or
       .maybeSingle();
     const { data: results } = await client.from('results').select('id').eq('order_id', orderId);
     if (patient && results && results.length > 0) {
-      await issueResultsLink(orderId, patient.email as string, patient.full_name as string);
+      await issueResultsLink(orderId, patient.email as string, patient.full_name as string, requestOrigin(request));
     }
   }
 

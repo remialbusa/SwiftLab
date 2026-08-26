@@ -71,8 +71,12 @@ export function resultsReadyHtml(params: {
   );
 }
 
-/** Link used in emails — absolute URL from APP_URL. */
-export function absoluteUrl(path: string): string {
-  const base = getServerEnv().APP_URL.replace(/\/$/, '');
+/**
+ * Build an absolute URL for email links.
+ * Prefers the origin the request actually came in on (public tunnel/domain)
+ * so patients never see localhost; falls back to APP_URL.
+ */
+export function absoluteUrl(path: string, origin?: string): string {
+  const base = (origin ?? getServerEnv().APP_URL).replace(/\/$/, '');
   return `${base}${path.startsWith('/') ? path : `/${path}`}`;
 }
