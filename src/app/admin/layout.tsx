@@ -20,6 +20,9 @@ export default async function AdminLayout({
             SwiftLab <span className="text-slate-700">Admin</span>
           </Link>
           <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-slate-600">
+            <Link href="/admin/patients" className="hover:text-teal-700">
+              Patients
+            </Link>
             <Link href="/admin/lab-tests" className="hover:text-teal-700">
               Lab tests
             </Link>

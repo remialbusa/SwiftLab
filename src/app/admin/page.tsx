@@ -6,6 +6,15 @@ export default function AdminHomePage() {
       <h1 className="text-xl font-bold text-slate-900">Admin</h1>
       <div className="grid gap-4 sm:grid-cols-2">
         <Link
+          href="/admin/patients"
+          className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-teal-400"
+        >
+          <h2 className="font-semibold text-slate-800">Patients</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            View and permanently remove patient records and their data.
+          </p>
+        </Link>
+        <Link
           href="/admin/lab-tests"
           className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-teal-400"
         >
