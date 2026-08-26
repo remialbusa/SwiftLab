@@ -23,6 +23,8 @@ export interface CreateOrderInput {
   phone?: string;
   testIds: string[];
   privacyConsent: boolean;
+  /** Optional appointment slot to book for this order. */
+  slotId?: string;
   /** Origin of the request (public URL the patient used). Used for email links. */
   origin?: string;
 }
@@ -110,6 +112,25 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     purpose: 'tracking',
     expires_at: expiresAt.toISOString(),
   });
+
+  // Optional appointment booking. Best-effort like email: a full/raced slot
+  // must not lose the order, which is already persisted. Log it for follow-up.
+  if (input.slotId) {
+    const { data: booked, error: bookErr } = await client.rpc('book_slot', {
+      p_order_id: order.id,
+      p_slot_id: input.slotId,
+    });
+    if (bookErr || !booked) {
+      console.error('[orders] slot booking failed', bookErr?.message ?? 'slot unavailable');
+      await writeAuditLog({
+        actorType: 'system',
+        action: 'appointment.booking_failed',
+        resourceType: 'order',
+        resourceId: order.id,
+        metadata: { slotId: input.slotId, error: bookErr?.message ?? 'slot unavailable' },
+      });
+    }
+  }
 
   const trackingUrl = absoluteUrl(`/track/${trackingToken}`, input.origin);
   // Email is best-effort: a delivery failure must not lose the order, which

@@ -2,6 +2,8 @@
 
 import { useId, useState } from "react";
 import { useLabTests } from "@/hooks/useLabTests";
+import type { Slot } from "@/hooks/useSlots";
+import SlotPicker from "@/components/scheduling/SlotPicker";
 import Header from "@/components/Header";
 import { apiFetch } from "@/lib/api";
 
@@ -22,6 +24,9 @@ export default function OrderPage() {
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<FormStatus>({ status: "idle" });
+  // Scheduling: chosen date + selected slot (optional).
+  const [slotDate, setSlotDate] = useState<string | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const nameId = useId();
   const lastNameId = useId();
   const dobId = useId();
@@ -79,6 +84,7 @@ export default function OrderPage() {
           phone: phone || undefined,
           testIds: selected,
           privacyConsent: consent,
+          slotId: selectedSlot?.id,
         }),
       });
       const json = (await res.json()) as {
@@ -297,6 +303,27 @@ export default function OrderPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 className="field-input"
                 placeholder="+63 912 345 6789"
+              />
+            </div>
+          </div>
+
+          {/* Scheduling: optional appointment slot picker */}
+          <div className="mt-6 border-t border-[#eef3f3] pt-5">
+            <h2 className="font-poppins text-base font-semibold text-navy-deep">
+              Schedule your visit{" "}
+              <span className="text-xs font-normal text-muted">(optional)</span>
+            </h2>
+            <p className="mt-1 text-sm text-muted">
+              Pick a date and time slot for your appointment. You can also
+              submit without one and we&apos;ll contact you.
+            </p>
+
+            <div className="mt-4">
+              <SlotPicker
+                date={slotDate}
+                onDateChange={setSlotDate}
+                selectedSlot={selectedSlot}
+                onSlotChange={setSelectedSlot}
               />
             </div>
           </div>

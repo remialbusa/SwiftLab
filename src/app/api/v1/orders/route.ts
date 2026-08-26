@@ -12,6 +12,7 @@ const createOrderSchema = z.object({
   phone: z.string().max(20).optional(),
   testIds: z.array(z.string().uuid()).min(1).max(20),
   privacyConsent: z.boolean(),
+  slotId: z.string().uuid().optional(),
 });
 
 /**
