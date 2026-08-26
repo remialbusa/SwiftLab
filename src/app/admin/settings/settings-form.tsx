@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface Settings {
   resultsUnlockMaxAttempts: number;
@@ -27,7 +28,7 @@ export default function AdminSettingsClient({
   const save = async () => {
     setSaving(true);
     setSaveError(null);
-    const res = await fetch("/api/v1/admin/settings", {
+    const res = await apiFetch("/api/v1/admin/settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),

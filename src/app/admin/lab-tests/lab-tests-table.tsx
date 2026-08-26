@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface LabTest {
   id: string;
@@ -30,7 +31,7 @@ export default function AdminLabTestsClient({
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const refresh = async () => {
-    const res = await fetch("/api/v1/admin/lab-tests");
+    const res = await apiFetch("/api/v1/admin/lab-tests");
     if (!res.ok) return;
     const json = (await res.json()) as { tests: LabTest[] };
     setTests(json.tests);
@@ -46,7 +47,7 @@ export default function AdminLabTestsClient({
       cashPrice: Number(form.cashPrice),
       durationMinutes: Number(form.durationMinutes),
     };
-    const res = await fetch(
+    const res = await apiFetch(
       editingId
         ? `/api/v1/admin/lab-tests/${editingId}`
         : "/api/v1/admin/lab-tests",
@@ -81,7 +82,7 @@ export default function AdminLabTestsClient({
 
   const deactivate = async (test: LabTest) => {
     if (!confirm(`Deactivate "${test.name}"?`)) return;
-    const res = await fetch(`/api/v1/admin/lab-tests/${test.id}`, {
+    const res = await apiFetch(`/api/v1/admin/lab-tests/${test.id}`, {
       method: "DELETE",
     });
     if (!res.ok) {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Header from "@/components/Header";
+import { apiFetch } from "@/lib/api";
 
 interface DownloadFile {
   id: string;
@@ -25,7 +26,7 @@ export default function ResultsAccessPage() {
     let cancelled = false;
     const load = async () => {
       try {
-        const res = await fetch(`/api/v1/results/${token}`);
+        const res = await apiFetch(`/api/v1/results/${token}`);
         const json = (await res.json()) as {
           error?: string;
           files?: DownloadFile[];

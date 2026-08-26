@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/api';
 
 export interface LabTest {
   id: string;
@@ -24,7 +25,7 @@ export function useLabTests(): FetchState & { reload: () => void } {
     let cancelled = false;
     const load = async () => {
       try {
-        const res = await fetch('/api/v1/lab-tests');
+        const res = await apiFetch('/api/v1/lab-tests');
         if (!res.ok) throw new Error('Failed to load tests');
         const json = (await res.json()) as { tests: LabTest[] };
         if (!cancelled) setState({ status: 'ready', tests: json.tests });

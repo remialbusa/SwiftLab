@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { useLabTests } from "@/hooks/useLabTests";
 import Header from "@/components/Header";
+import { apiFetch } from "@/lib/api";
 
 type FormStatus =
   | { status: "idle" }
@@ -66,7 +67,7 @@ export default function OrderPage() {
     }
     setStatus({ status: "submitting" });
     try {
-      const res = await fetch("/api/v1/orders", {
+      const res = await apiFetch("/api/v1/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

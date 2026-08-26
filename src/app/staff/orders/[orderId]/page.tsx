@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
+import { apiFetch } from "@/lib/api";
 
 interface OrderDetail {
   id: string;
@@ -94,7 +95,7 @@ export default function StaffOrderDetailPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadOrder = async () => {
-    const res = await fetch(`/api/v1/staff/orders/${orderId}`);
+    const res = await apiFetch(`/api/v1/staff/orders/${orderId}`);
     if (!res.ok) {
       setState({ status: "error", message: "Could not load order." });
       return;
@@ -121,7 +122,7 @@ export default function StaffOrderDetailPage() {
     if (modal.kind !== "status") return;
     const target = modal.target;
     setModal({ ...modal, submitting: true });
-    const res = await fetch(`/api/v1/staff/orders/${orderId}`, {
+    const res = await apiFetch(`/api/v1/staff/orders/${orderId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: target }),
@@ -161,11 +162,14 @@ export default function StaffOrderDetailPage() {
       return;
     }
     setModal({ ...modal, submitting: true });
-    const res = await fetch(`/api/v1/staff/orders/${orderId}/confirm-payment`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ method: "in_person", amount: num }),
-    });
+    const res = await apiFetch(
+      `/api/v1/staff/orders/${orderId}/confirm-payment`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ method: "in_person", amount: num }),
+      },
+    );
     if (!res.ok) {
       setModal({
         kind: "payment",
@@ -183,7 +187,7 @@ export default function StaffOrderDetailPage() {
     setUploadState({ status: "uploading" });
     const body = new FormData();
     body.append("file", file);
-    const res = await fetch(`/api/v1/staff/orders/${orderId}/results`, {
+    const res = await apiFetch(`/api/v1/staff/orders/${orderId}/results`, {
       method: "POST",
       body,
     });

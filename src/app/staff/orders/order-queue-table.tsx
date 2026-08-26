@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface QueueOrder {
   id: string;
@@ -39,7 +40,7 @@ export default function OrderQueueTable({
     const params = new URLSearchParams();
     if (s) params.set("search", s);
     if (st && st !== "all") params.set("status", st);
-    const res = await fetch(`/api/v1/staff/orders?${params.toString()}`);
+    const res = await apiFetch(`/api/v1/staff/orders?${params.toString()}`);
     if (!res.ok) return;
     const json = (await res.json()) as { orders: QueueOrder[] };
     setOrders(json.orders);

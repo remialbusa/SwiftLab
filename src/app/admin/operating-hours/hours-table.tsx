@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface HoursRow {
   id: string;
@@ -40,7 +41,7 @@ export default function AdminOperatingHoursClient({
   const save = async () => {
     setSaving(true);
     setSaveError(null);
-    const res = await fetch("/api/v1/admin/operating-hours", {
+    const res = await apiFetch("/api/v1/admin/operating-hours", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

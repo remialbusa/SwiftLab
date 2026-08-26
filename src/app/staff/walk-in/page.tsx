@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLabTests } from "@/hooks/useLabTests";
+import { apiFetch } from "@/lib/api";
 
 type Status =
   | { status: "idle" }
@@ -34,7 +35,7 @@ export default function WalkInPage() {
     event.preventDefault();
     setStatus({ status: "submitting" });
     try {
-      const res = await fetch("/api/v1/staff/orders/walk-in", {
+      const res = await apiFetch("/api/v1/staff/orders/walk-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

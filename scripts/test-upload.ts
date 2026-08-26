@@ -31,7 +31,8 @@ async function main(): Promise<void> {
   console.log('Logged in as', email);
 
   const fd = new FormData();
-  fd.append('file', new Blob([makeMinimalPdf()], { type: 'application/pdf' }), 'test-result.pdf');
+  const pdfBytes = new Uint8Array(makeMinimalPdf());
+  fd.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), 'test-result.pdf');
   const up = await fetch(`${base}/api/v1/staff/orders/${orderId}/results`, {
     method: 'POST',
     body: fd,

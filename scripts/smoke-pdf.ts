@@ -32,8 +32,6 @@ async function main(): Promise<void> {
       input: encryptedPath,
       output: outCorrect,
       password,
-      keyLength: 128,
-      restrictions: { extract: 'y' },
     });
     const decrypted = await readFile(outCorrect);
     console.log('Decrypt with correct password OK:', decrypted.length > 0);
@@ -46,8 +44,6 @@ async function main(): Promise<void> {
         input: encryptedPath,
         output: outWrong,
         password: 'not-the-password',
-        keyLength: 128,
-        restrictions: { extract: 'y' },
       });
     } catch {
       failed = true;

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Header from "@/components/Header";
+import { apiFetch } from "@/lib/api";
 
 interface OrderSummary {
   id: string;
@@ -53,7 +54,7 @@ export default function TrackEntryPage() {
     event.preventDefault();
     setState({ status: "checking" });
     try {
-      const res = await fetch("/api/v1/track/lookup", {
+      const res = await apiFetch("/api/v1/track/lookup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
