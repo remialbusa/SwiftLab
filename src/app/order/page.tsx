@@ -114,7 +114,7 @@ export default function OrderPage() {
   };
 
   if (status.status === "success") {
-    const trackUrl = `${window.location.origin}/track`;
+    const trackUrl = `${window.location.origin}/track/${status.trackingToken}`;
     return (
       <>
         <Header />

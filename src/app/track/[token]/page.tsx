@@ -60,7 +60,7 @@ export default async function TrackPage({
 
   const { data: order } = await client
     .from("orders")
-    .select("id, status, created_at")
+    .select("id, status, created_at, tracking_code")
     .eq("id", link.order_id)
     .maybeSingle();
   if (!order) notFound();
@@ -112,7 +112,8 @@ export default async function TrackPage({
           <div className="flex flex-wrap items-start justify-between gap-4 border-b border-dashed border-[#DCE7E9] pb-6">
             <div>
               <div className="font-mono text-[11.5px] uppercase tracking-[1.5px] text-muted">
-                Request Key · {summary.id.slice(0, 8)}
+                Request Key ·{" "}
+                {(order.tracking_code as string | null) ?? summary.id.slice(0, 8)}
               </div>
               <h3 className="mt-1 font-poppins text-lg font-semibold text-navy-deep">
                 {summary.tests.join(", ")}

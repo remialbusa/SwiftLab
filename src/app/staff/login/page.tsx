@@ -31,7 +31,12 @@ export default function StaffLoginPage() {
         setStatus({ status: "error", message: json.error ?? "Login failed." });
         return;
       }
-      router.push("/staff/orders");
+      // Middleware appends ?next=<path> when a signed-out user hits a staff or
+      // admin page; land them where they were going instead of the queue.
+      const next = new URLSearchParams(window.location.search).get("next");
+      const isInternal =
+        next !== null && next.startsWith("/") && !next.startsWith("//");
+      router.push(isInternal ? next : "/staff/orders");
       router.refresh();
     } catch {
       setStatus({
