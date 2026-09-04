@@ -1,5 +1,6 @@
 /**
- * Middleware for staff-route protection.
+ * Proxy for staff-route protection. The `middleware` file convention was
+ * deprecated in Next 16 and renamed to `proxy`.
  *
  * - Public: `/`, `/order`, `/track`, `/results` (and its subpaths).
  * - Staff: `/admin/*`, `/staff/*` require an authenticated staff session.
@@ -22,7 +23,7 @@ function isPublicPath(pathname: string): boolean {
   );
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isPublicPath(pathname)) {
     return NextResponse.next({ request });
