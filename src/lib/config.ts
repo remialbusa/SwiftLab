@@ -76,3 +76,13 @@ export function getClientEnv() {
   }
   return parsed.data;
 }
+
+/** Client-safe env, or null when not configured (builds, misconfigured hosts). */
+export function tryGetClientEnv() {
+  const parsed = clientEnvSchema.safeParse({
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  });
+  if (!parsed.success) return null;
+  return parsed.data;
+}
