@@ -14,7 +14,7 @@ async function fetchOrders(
   let query = client
     .from("orders")
     .select(
-      "id, status, created_at, walk_in, patients(full_name, email), order_tests(lab_tests(name))",
+      "id, status, created_at, tracking_code, walk_in, patients(full_name, email), order_tests(lab_tests(name))",
       { count: "exact" },
     )
     .order("created_at", { ascending: false })
@@ -23,12 +23,20 @@ async function fetchOrders(
   if (statusFilter && statusFilter !== "all") {
     query = query.eq("status", statusFilter);
   }
-  if (search) {
+  const trimmedSearch = search?.trim() ?? "";
+  const codeQuery = trimmedSearch
+    ? /^SL-[A-Z0-9]*$/i.test(trimmedSearch)
+    : false;
+  if (codeQuery) {
+    query = query.ilike("tracking_code", `%${trimmedSearch.toUpperCase()}%`);
+  } else if (trimmedSearch) {
     const { data: patients } = await client
       .from("patients")
       .select("id")
       .or(
-        `full_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`,
+        trimmedSearch.includes("@")
+          ? `email.ilike.%${trimmedSearch}%`
+          : `full_name.ilike.%${trimmedSearch}%,last_name.ilike.%${trimmedSearch}%`,
       );
     if (!patients || patients.length === 0) return { orders: [], total: 0 };
     query = query.in(
@@ -43,6 +51,7 @@ async function fetchOrders(
     status: o.status,
     createdAt: o.created_at,
     walkIn: o.walk_in,
+    trackingCode: (o.tracking_code as string | null) ?? "",
     patientName:
       (o.patients as { full_name?: string } | null)?.full_name ?? "Unknown",
     patientEmail: (o.patients as { email?: string } | null)?.email ?? "",
@@ -66,10 +75,7 @@ export default async function StaffOrdersPage({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-slate-900">Order queue</h1>
-        <span className="text-sm text-slate-500">{total} order(s)</span>
-      </div>
+      <h1 className="text-xl font-bold text-slate-900">Order queue</h1>
       <Suspense
         fallback={<p className="mt-6 text-sm text-slate-400">Loading…</p>}
       >

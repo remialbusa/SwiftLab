@@ -37,15 +37,20 @@ export async function GET(request: Request) {
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  // Keyword search on patient name/email via the patients table.
+  // Keyword search: tracking codes (SL-…) resolve against orders directly;
+  // anything else searches patient name/email via the patients table.
+  const trimmedSearch = search?.trim() ?? '';
+  const codeQuery = trimmedSearch
+    ? /^SL-[A-Z0-9]*$/i.test(trimmedSearch)
+    : false;
   let patientIds: string[] | undefined;
-  if (search) {
+  if (trimmedSearch && !codeQuery) {
     const { data: patients } = await client
       .from('patients')
       .select('id')
-      .or(search.includes('@')
-        ? `email.ilike.%${search}%`
-        : `full_name.ilike.%${search}%,last_name.ilike.%${search}%`);
+      .or(trimmedSearch.includes('@')
+        ? `email.ilike.%${trimmedSearch}%`
+        : `full_name.ilike.%${trimmedSearch}%,last_name.ilike.%${trimmedSearch}%`);
     patientIds = (patients ?? []).map((p) => p.id as string);
     if (patientIds.length === 0) {
       return NextResponse.json({ orders: [], total: 0 });
@@ -54,10 +59,13 @@ export async function GET(request: Request) {
 
   let query = client
     .from('orders')
-    .select('id, status, created_at, walk_in, patients(full_name, email), order_tests(lab_tests(name))', { count: 'exact' })
+    .select('id, status, created_at, tracking_code, walk_in, patients(full_name, email), order_tests(lab_tests(name))', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
 
+  if (codeQuery) {
+    query = query.ilike('tracking_code', `%${trimmedSearch.toUpperCase()}%`);
+  }
   if (patientIds) {
     query = query.in('patient_id', patientIds);
   }
@@ -75,6 +83,7 @@ export async function GET(request: Request) {
     status: order.status,
     createdAt: order.created_at,
     walkIn: order.walk_in,
+    trackingCode: (order.tracking_code as string | null) ?? '',
     patientName: (order.patients as { full_name?: string } | null)?.full_name ?? 'Unknown',
     patientEmail: (order.patients as { email?: string } | null)?.email ?? '',
     tests: (order.order_tests as { lab_tests?: { name?: string } }[] ?? []).map((t) => t.lab_tests?.name ?? 'Unknown'),
