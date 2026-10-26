@@ -1,0 +1,17 @@
+node_modules/
+vendor/
+dist/
+build/
+.next/
+.venv/
+venv/
+bin/
+obj/
+public/build/
+.expo/
+*.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+
